@@ -1,5 +1,6 @@
 package com.learning.springboot.entities;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.TemporalType;
 
 import com.learning.springboot.utilities.enums.Gender;
 import com.learning.springboot.utilities.enums.UserType;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.hibernate.annotations.Type;
 
 @Entity(name = "User")
 public class User {
@@ -21,34 +24,47 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Schema(hidden = true)
 	private Long id;
-	
-	@Column(nullable = false, length = 50, name = "firstName")
+
+	@Schema(example = "Shobhit", defaultValue = "Shobhit", required = true)
+	@Column(nullable = false, length = 50)
 	private String firstName;
-	
-	@Column(nullable = false, length = 50, name = "lastName")
+
+	@Schema(example = "Sharma", defaultValue = "Sharma", required = true)
+	@Column(nullable = false, length = 50)
 	private String lastName;
-	
-	@Column(nullable = false, length = 70, unique = true, name = "email")
+
+	@Schema(example = "sharma-example@yopmail.com", defaultValue = "sharma-example@yopmail.com", required = true)
+	@Column(nullable = false, length = 70, unique = true)
 	private String email;
-	
+
+	@Schema(example = "123456", defaultValue = "123456", required = true)
 	@Column(length = 1000, nullable = true)
 	private String password;
-	
-	@Enumerated(EnumType.STRING)
-	private Gender gender;	
-	
+
+	@Schema(example = "MALE", defaultValue = "MALE", required = true)
+	@Enumerated(value = EnumType.STRING)
+	@Column(columnDefinition = "ENUM('MALE', 'FEMALE', 'TRANSGENDER', 'OTHER') default 'MALE'")
+	private Gender gender;
+
+
 	@Temporal(TemporalType.DATE)
-	@Column(name = "birthDate", nullable = true)
+	@Schema(required = true)
+	@Column(nullable = true)
 	private Date birthDate;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "userType")
+	@Enumerated(value = EnumType.STRING)
+	@Column(columnDefinition = "ENUM('DEVOTEE', 'UNION', 'TEMPLE_MANAGEMENT') default 'DEVOTEE'")
 	private UserType userType = UserType.DEVOTEE;
-	
+
+	@Schema(hidden = true)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createdAt", nullable = true)
+	@Column(nullable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
 	private Date createdAt;
+
+	public User() {
+	}
 
 	public Long getId() {
 		return id;
