@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = {"/User"})
 @Tag(name = "User Management", description = "This Section will have all user related apis")
@@ -35,9 +37,15 @@ public class UserController {
 	
 	@PostMapping(path = {"/saveNewUser"}, consumes = {"application/json"}, produces = "application/json")
 	@Operation(summary = "createNewUser", description = "this api help to add new record of the user")
-	public ResponseEntity<User> createNewUser(@RequestBody User user) {
+	public ResponseEntity<User> createNewUser( @Valid @RequestBody User user) {
 
-		this.userService.createUser(user);
+		try {
+
+			this.userService.createUser(user);
+		} catch (Exception exception) {
+			System.out.println(exception);
+			exception.printStackTrace();
+		}
 		return ResponseEntity.ok().body(user);
 	}
 

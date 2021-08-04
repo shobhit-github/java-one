@@ -12,11 +12,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Constraint;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.learning.springboot.utilities.enums.Gender;
 import com.learning.springboot.utilities.enums.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.Type;
 
 @Entity(name = "User")
 public class User {
@@ -29,18 +34,23 @@ public class User {
 
 	@Schema(example = "Shobhit", defaultValue = "Shobhit", required = true)
 	@Column(nullable = false, length = 50)
+	@NotBlank(message = "Please enter first name")
 	private String firstName;
 
 	@Schema(example = "Sharma", defaultValue = "Sharma", required = true)
 	@Column(nullable = false, length = 50)
+	@NotBlank(message = "Please enter last name")
 	private String lastName;
 
 	@Schema(example = "sharma-example@yopmail.com", defaultValue = "sharma-example@yopmail.com", required = true)
 	@Column(nullable = false, length = 70, unique = true)
+	@Email(message = "Please enter valid email id")
+	@NotBlank(message = "Please enter email address")
 	private String email;
 
 	@Schema(example = "123456", defaultValue = "123456", required = true)
 	@Column(length = 1000, nullable = true)
+	@NotBlank(message = "Please enter password")
 	private String password;
 
 	@Schema(example = "MALE", defaultValue = "MALE", required = true)
@@ -50,17 +60,18 @@ public class User {
 
 
 	@Temporal(TemporalType.DATE)
-	@Schema(required = true)
-	@Column(nullable = true)
+	@Schema(required = true, example = "1996-12-23", defaultValue = "1996-12-23")
+	@Column()
 	private Date birthDate;
-	
+
+	@Schema(example = "DEVOTEE", defaultValue = "DEVOTEE", required = true)
 	@Enumerated(value = EnumType.STRING)
-	@Column(columnDefinition = "ENUM('DEVOTEE', 'UNION', 'TEMPLE_MANAGEMENT') default 'DEVOTEE'")
-	private UserType userType = UserType.DEVOTEE;
+	@Column(columnDefinition = "ENUM('DEVOTEE', 'UNION', 'TEMPLE_MANAGEMENT') DEFAULT 'DEVOTEE'")
+	private UserType userType;
 
 	@Schema(hidden = true)
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false, columnDefinition = "DATETIME default CURRENT_TIMESTAMP")
+	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Date createdAt;
 
 	public User() {
