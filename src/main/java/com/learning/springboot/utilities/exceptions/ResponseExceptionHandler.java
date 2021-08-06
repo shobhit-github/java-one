@@ -1,5 +1,6 @@
 package com.learning.springboot.utilities.exceptions;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,14 @@ import java.util.stream.Collectors;
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-    private Object parsingErrorIntoObject(FieldError errorObject, Map<String, Object> errorArray) {
+    private Object parsingErrorIntoObject(FieldError errorObject) {
 
-        errorArray.put("fieldName", errorObject.getField());
-        errorArray.put("message", errorObject.getDefaultMessage());
+        Map<String, Object> errObj = new HashMap<>();
 
-        return errorArray;
+        errObj.put("fieldName", errorObject.getField());
+        errObj.put("message", errorObject.getDefaultMessage());
+
+        return errObj;
     }
 
     @Override
@@ -33,16 +36,13 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("timestamp", new Date());
         body.put("status", status.value());
 
-        Map<String, Object> errObj = new HashMap<>();
-
         //Get all errors
         List<Object> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map( e -> this.parsingErrorIntoObject(e, errObj))
+                .map(this::parsingErrorIntoObject)
                 .collect(Collectors.toList());
 
-        System.out.println(errors);
         body.put("errors", errors);
 
         return new ResponseEntity<>(body, headers, status);

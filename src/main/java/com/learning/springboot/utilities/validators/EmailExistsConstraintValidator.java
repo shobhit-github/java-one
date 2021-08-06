@@ -1,33 +1,30 @@
 package com.learning.springboot.utilities.validators;
 
 import com.learning.springboot.dao.UserRepository;
+import com.learning.springboot.utilities.annotations.UniqueEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.lang.annotation.Annotation;
 
-public class EmailExistsConstraintValidator implements ConstraintValidator {
-
+public class EmailExistsConstraintValidator implements ConstraintValidator<UniqueEmail, String> {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public void initialize(Annotation constraintAnnotation) {
-    }
-
-    @Override
-    public boolean isValid(Object target, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(String target, ConstraintValidatorContext constraintValidatorContext) {
 
         boolean isExist = false;
 
         try {
-            isExist = userRepository.existsByEmail((String) target);
+            isExist = userRepository.existsByEmail(target);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return isExist;
+        return !isExist;
     }
+
+
 }

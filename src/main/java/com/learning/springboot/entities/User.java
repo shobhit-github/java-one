@@ -19,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.learning.springboot.utilities.annotations.UniqueEmail;
 import com.learning.springboot.utilities.enums.Gender;
 import com.learning.springboot.utilities.enums.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,6 +47,7 @@ public class User {
 	@Column(nullable = false, length = 70, unique = true)
 	@Email(message = "Please enter valid email id")
 	@NotBlank(message = "Please enter email address")
+	@UniqueEmail
 	private String email;
 
 	@Schema(example = "123456", defaultValue = "123456", required = true)
