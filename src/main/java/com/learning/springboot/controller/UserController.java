@@ -2,20 +2,16 @@ package com.learning.springboot.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.learning.springboot.dao.UserRepository;
+import com.learning.springboot.utilities.constants.ErrorResponseMessage;
+import com.learning.springboot.utilities.exceptions.RecordNotFoundException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.learning.springboot.entities.User;
 import com.learning.springboot.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import javax.validation.Valid;
@@ -26,27 +22,32 @@ import javax.validation.Valid;
 public class UserController {
 	
 	
-	@Autowired
-	private UserService userService;
-	
-	@GetMapping(path = {"/allUsers"}, produces = "application/json")
+	private final UserService userService;
+	private final UserRepository userRepository;
+
+	public UserController(UserService userService, UserRepository userRepository) {
+		this.userService = userService;
+		this.userRepository = userRepository;
+	}
+
+
+	@GetMapping(path = {"/retrieveAll"}, produces = "application/json")
 	@Operation(summary = "getListOfUser", description = "this api help to fetch list of user record" )
 	public List<User> getAllUser() {
-		return this.userService.getAllUser();
+		return userRepository.findAll();
+	}
+
+	@GetMapping(path = {"/retrieveById/{id}"}, produces = "application/json")
+	@Operation(summary = "getListOfUser", description = "this api help to fetch list of user record" )
+	public User getUserById(@PathVariable Long id) {
+		return userRepository.findById(id)
+				.orElseThrow(() -> new RecordNotFoundException(ErrorResponseMessage.USER_IS_NOT_EXIST));
 	}
 	
-	@PostMapping(path = {"/saveNewUser"}, consumes = {"application/json"}, produces = "application/json")
+	@PostMapping(path = {"/createNew"}, consumes = {"application/json"}, produces = "application/json")
 	@Operation(summary = "createNewUser", description = "this api help to add new record of the user")
-	public ResponseEntity<User> createNewUser( @Valid @RequestBody User user) {
-
-		try {
-
-			this.userService.createUser(user);
-		} catch (Exception exception) {
-			System.out.println(exception);
-			exception.printStackTrace();
-		}
-		return ResponseEntity.ok().body(user);
+	public User createNewUser( @Valid @RequestBody User user) {
+		return userRepository.save(user);
 	}
 
 }
