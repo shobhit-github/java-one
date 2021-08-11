@@ -27,7 +27,8 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="JavaOne" value="68d12078-52fc-4c79-8950-ba2e2909c6da" />
+          <factory-entry name="entityManagerFactory" value="68d12078-52fc-4c79-8950-ba2e2909c6da" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
@@ -45,6 +46,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-test-sources/test-annotations" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -1,6 +1,5 @@
 package com.learning.springboot.entities;
 
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -12,22 +11,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Constraint;
-import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 
 import com.learning.springboot.utilities.annotations.UniqueEmail;
 import com.learning.springboot.utilities.enums.Gender;
 import com.learning.springboot.utilities.enums.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Entity(name = "User")
+@Entity(name = "Users")
 public class User {
 
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Schema(hidden = true)
@@ -51,7 +47,7 @@ public class User {
 	private String email;
 
 	@Schema(example = "123456", defaultValue = "123456", required = true)
-	@Column(length = 1000, nullable = true)
+	@Column(length = 1000)
 	@NotBlank(message = "Please enter password")
 	private String password;
 
@@ -166,5 +162,5 @@ public class User {
 
 
 
-	
+
 }

@@ -12,17 +12,17 @@ import java.util.List;
 @Service
 public class UserService {
 
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
-	
+
+
 	public List<User> getAllUser() {
 		return this.userRepository.findAll();
 	}
-	
-	
-	public User createUser(User user) {
-		return this.userRepository.save(user);
+
+
+	public void createUser(User user) {
+		this.userRepository.save(user);
 	}
 }
