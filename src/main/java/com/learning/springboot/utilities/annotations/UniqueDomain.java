@@ -1,6 +1,7 @@
 package com.learning.springboot.utilities.annotations;
 
 
+import com.learning.springboot.utilities.enums.UserType;
 import com.learning.springboot.utilities.validators.UniqueDomainConstraintValidator;
 
 import javax.validation.Constraint;
@@ -20,5 +21,7 @@ public @interface UniqueDomain {
     public Class<?>[] groups() default {};
 
     public Class<? extends Payload>[] payload() default{};
+
+    public UserType checkFor() default UserType.UNION;
 }
 

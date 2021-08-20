@@ -1,6 +1,7 @@
 package com.learning.springboot.utilities.annotations;
 
 
+import com.learning.springboot.utilities.enums.UserType;
 import com.learning.springboot.utilities.validators.UniqueEmailConstraintValidator;
 
 import javax.validation.Constraint;
@@ -20,5 +21,7 @@ public @interface UniqueEmail {
     public Class<?>[] groups() default {};
 
     public Class<? extends Payload>[] payload() default{};
+
+    public UserType checkFor() default UserType.DEVOTEE;
 }
 

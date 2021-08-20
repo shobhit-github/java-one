@@ -2,15 +2,7 @@ package com.learning.springboot.entities;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -29,6 +21,15 @@ public class User {
 	@Schema(hidden = true)
 	private Long id;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "unionId")
+	private Union union;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "templeId")
+	private Temple temple;
+
+
 	@Schema(example = "Shobhit", defaultValue = "Shobhit", required = true)
 	@Column(nullable = false, length = 50)
 	@NotBlank(message = "Please enter first name")
@@ -43,8 +44,9 @@ public class User {
 	@Column(nullable = false, length = 70, unique = true)
 	@Email(message = "Please enter valid email id")
 	@NotBlank(message = "Please enter email address")
-	@UniqueEmail
+	@UniqueEmail(checkFor = UserType.DEVOTEE)
 	private String email;
+
 
 	@Schema(example = "123456", defaultValue = "123456", required = true)
 	@Column(length = 1000)

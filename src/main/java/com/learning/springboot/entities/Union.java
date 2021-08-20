@@ -3,12 +3,14 @@ package com.learning.springboot.entities;
 import com.learning.springboot.utilities.annotations.UniqueDomain;
 import com.learning.springboot.utilities.annotations.UniqueEmail;
 
+import com.learning.springboot.utilities.enums.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity(name = "Unions")
@@ -28,17 +30,17 @@ public class Union {
 	@Schema(example = "balajisang@yopmail.com", defaultValue = "balajisang@yopmail.com", required = true)
 	@Column(length = 70, unique = true)
 	@Email(message = "Please enter valid email id")
-	@UniqueEmail
+	@UniqueEmail(checkFor = UserType.UNION)
 	private String email;
 
 	@Schema(example = "www.example.com", defaultValue = "www.example.com")
 	@Column(unique = true)
-	@UniqueDomain
+	@UniqueDomain(checkFor = UserType.UNION)
 	private String website;
 
 	@Schema(example = "Sample Description", defaultValue = "Sample Description")
 	@Column(columnDefinition = "TEXT")
-	@NotBlank(message = "Please enter last name")
+	@NotBlank(message = "Please enter description of the temple")
 	private String description;
 
 	@Temporal(TemporalType.DATE)
@@ -51,6 +53,9 @@ public class Union {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Date createdAt;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "union")
+	private Collection<User> users;
 
 	public Union(String unionName, String email, String website, String description, Date establishDate) {
 		this.unionName = unionName;
